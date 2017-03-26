@@ -1,3 +1,5 @@
+#define MIN_BRIGHT      20
+#define MAX_BRIGHT      255
 #define RED 9
 #define GREEN 10
 #define BLUE 11
@@ -28,15 +30,15 @@ void loop() {
 
 void rgb_fade(int idelay) { //-FADE LEDS THROUGH HSV RAINBOW
   ibright++;
-  if (ibright >= 255) {
-    ibright = 0;
+  if (ibright >= MAX_BRIGHT) {
+    ibright = MIN_BRIGHT;
     idex--;
     if (idex < 0) {
       idex = 2;
     }
   }
   thisColor[idex] = ibright;
-  thisColor[(idex + 1) % 3] = 255 - ibright;
+  thisColor[(idex + 1) % 3] = MAX_BRIGHT - ibright + MIN_BRIGHT;
   one_color_all(thisColor[0],thisColor[1],thisColor[2]);
   delay(idelay);
 }
