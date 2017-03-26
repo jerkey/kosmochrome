@@ -8,6 +8,7 @@ void setup() {
   pinMode(FET_A,OUTPUT);
   pinMode(FET_B,OUTPUT);
   pinMode(FET_C,OUTPUT);
+  Serial.setTimeout(50);
 }
 
 void loop() {
