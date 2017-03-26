@@ -2,6 +2,9 @@
 #define GREEN 10
 #define BLUE 11
 
+int ibright = 0;;          //-BRIGHTNESS (0-255)
+int idex;             //-LED INDEX (0 to num_leds-1
+
 void setup() {
   Serial.begin(57600);
   Serial.println('kosmochrome');
@@ -15,13 +18,34 @@ void loop() {
   while (Serial.available() > 0) {
     int inputValue = Serial.parseInt();
     Serial.println(inputValue);
-    digitalWrite(RED,inputValue & 1);
-    digitalWrite(GREEN,inputValue & 2);
-    digitalWrite(BLUE,inputValue & 4);
-    delay(inputValue);
-    digitalWrite(RED,LOW);
-    digitalWrite(GREEN,LOW);
-    digitalWrite(BLUE,LOW);
   }
+  rgb_fade(10);
   digitalWrite(13,! digitalRead(13));
+}
+
+void rgb_fade(int idelay) { //-FADE LEDS THROUGH HSV RAINBOW
+  ibright++;
+  if (ibright >= 255) {
+    ibright = 0;
+    idex--;
+    if (idex < 0) {
+      idex = 2;
+    }
+  }
+  int thisColor[3];
+  thisColor[idex] = ibright;
+  thisColor[(idex + 1) % 3] = 255 - ibright;
+  one_color_all(thisColor[0],thisColor[1],thisColor[2]);
+  delay(idelay);
+}
+
+void one_color_all(int red, int grn, int blu) {
+  Serial.print(red&255);
+  Serial.print(", ");
+  Serial.print(grn&255);
+  Serial.print(", ");
+  Serial.println(blu&255);
+  analogWrite(RED,red&255);
+  analogWrite(GREEN,grn&255);
+  analogWrite(BLUE,blu&255);
 }
